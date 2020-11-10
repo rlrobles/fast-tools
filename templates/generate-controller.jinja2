@@ -1,0 +1,19 @@
+require('dotenv').config();
+const {{ controllerName }} = require('../../src/controllers/{{ controllerName }}');
+
+{%- set functions =  ['listPolizasPersonas','listPolizasPersonas','listPolizasPersonas','listPolizasPersonas','listPolizasPersonas','listPolizasPersonas','listPolizasPersonas'] %}
+{%- for function in functions %}
+const {{ function }}Request = require('../data/{{ function }}.request.json');
+{%- endfor %}
+
+describe('{{ controllerName }} Spec ', () => {
+
+  {%- for function in functions %}
+  it('Status response must be True', async () => {
+    const result = await {{ controllerName }}.{{ function }}({{ function }}Request);
+    const data = JSON.parse(result.body);
+    expect(data.response.status.success).toBe(true);
+  });
+  {%- endfor %}
+
+});

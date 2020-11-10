@@ -1,0 +1,56 @@
+service: ${self:custom.region.${self:provider.region}}MTO${self:provider.stage}ACFPOLIZAS0001
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: ${self:custom.regionFullname.${self:provider.stage}}
+  stage: ${opt:stage,'DESA'}
+  timeout: 120
+  memorySize: 512
+  versionFunctions: false
+  tracing: true
+  role: arn:aws:iam::477542548955:role/${self:custom.region.${self:provider.region}}SEG${self:custom.stageUpper.${self:provider.stage}}IAMPCA001
+  apiGateway:
+    restApiId: ${self:custom.awsRestApiId.VALOR}
+    restApiRootResourceId: ${self:custom.awsRestApiRootResourceId.VALOR}
+  deploymentBucket:
+    name: ${self:provider.environment.BUCKET}
+    serverSideEncryption: AES256
+  stackTags:
+    NAME: ${self:custom.region.${self:provider.region}}MTO${self:provider.stage}ACFPOLIZAS0001
+    ENTORNO: ${self:provider.stage}
+    PROYECTO: PORTAL CANALES
+    DOMINIO: RIMAC
+    RESPONSABLE: DANNY ESCALANTE
+    ESTADO_OPERACION: PROYECTO
+    RESPALDO: BSEM
+
+functions:
+  {%- for function in functions %}
+  {{ function.name }}:
+    handler: src/controllers/{{ controllerName }}.{{ function.name}}
+    name: ${self:custom.region.${self:provider.region}}COM${self:provider.stage}{{ function.code}}
+    description: {{ function.description }}
+    tags:
+      NAME: ${self:custom.region.${self:provider.region}}COM${self:provider.stage}{{ function.code}}
+      ENTORNO: ${self:provider.stage}
+      PROYECTO: {{ projectName }}
+      DOMINIO: RIMAC
+      RESPONSABLE: {{ manager }}
+      ESTADO_OPERACION: PROYECTO
+      RESPALDO: BSEM 
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId3.VALOR}
+      subnetIds:
+        - ${self:custom.vpcSubnetId1.VALOR}
+        - ${self:custom.vpcSubnetId2.VALOR}
+        - ${self:custom.vpcSubnetId3.VALOR}
+        - ${self:custom.vpcSubnetId4.VALOR}
+    events:
+      - http:
+          path: {{ basePath }}{{ function.operationPath }}
+          method: post
+          cors: true
+          authorizer: ${self:custom.authorizerType.${self:provider.stage}}    
+  {%- endfor %}

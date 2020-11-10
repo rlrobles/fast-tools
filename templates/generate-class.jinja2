@@ -1,0 +1,13 @@
+class {{ className }} {
+  constructor({
+    {%- for parameter in parameters %}
+    {{ parameter }} = undefined,
+    {%- endfor %}
+  }) {
+    {%- for parameter in parameters %}
+    this.{{ parameter }} = {{ parameter }};
+    {%- endfor %}
+  }
+}
+
+module.exports = {{ className }};
