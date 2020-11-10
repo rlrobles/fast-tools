@@ -1,6 +1,15 @@
 import os
 import sys
+from flask import Flask, request, jsonify , Response, render_template
 
+app = Flask(__name__)
+
+@app.route('/msg')
+def index():
+    return "Test"
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 sys.path.insert(0, os.path.dirname(__file__))
 
