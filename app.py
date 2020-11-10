@@ -71,5 +71,5 @@ def funA006():
     print(res)
     return jsonIn
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
