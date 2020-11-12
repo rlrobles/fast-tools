@@ -6,8 +6,16 @@ import constants as const
 import json
 import os
 from rethinkdb import r 
+import platform
 
-UPLOAD_DIRECTORY = "./templates"
+UPLOAD_DIRECTORY = ""
+
+if platform.system() == "Linux":
+    UPLOAD_DIRECTORY = "/templates"
+else
+    UPLOAD_DIRECTORY = "./templates"
+
+#sUPLOAD_DIRECTORY = "./templates"
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
 
