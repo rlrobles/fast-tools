@@ -4,7 +4,12 @@ import routes as route
 import render as ren
 import constants as const
 import json
-import os 
+import os
+from rethinkdb import r 
+
+UPLOAD_DIRECTORY = "./templates"
+if not os.path.exists(UPLOAD_DIRECTORY):
+    os.makedirs(UPLOAD_DIRECTORY)
 
 app = Flask(__name__)
 
@@ -71,5 +76,42 @@ def funA006():
     print(res)
     return jsonIn
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+@app.route("/registros", methods=['GET'])
+#@basic_auth.required
+def funA007():
+    r.connect('localhost', 28015).repl()
+    cursor = r.table("tv_shows").run()
+    for document in cursor:
+        print(document)
+    #return cursor
+    #return cursor
+    return Response(cursor, mimetype='application/json')
+
+@app.route("/upload/document", methods=['POST'])
+#@basic_auth.required
+def funA008():
+    jsonIn = request.json
+    photos = UploadSet('photos', IMAGES)
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        rec = Photo(filename=filename, user=g.user.id)
+        rec.store()
+        flash("Photo saved.")
+        #return redirect(url_for('show', id=rec.id))
+    #return render_template('upload.html')
+    #res = ren.renderTemplate(const.INIT_PATH_TEMPLATE,'generate-controller.jinja2',jsonIn)
+    #return Response(res, mimetype='text/javascript')
+    return "fff"
+
+@app.route("/files", methods=['GET'])
+#@basic_auth.required
+def funA009():
+    files = []
+    for filename in os.listdir(UPLOAD_DIRECTORY):
+        path = os.path.join(UPLOAD_DIRECTORY, filename)
+        if os.path.isfile(path):
+            files.append(filename)
+    return jsonify(files)
+
+if __name__ == '__main__':
+    app.run(debug=True)
