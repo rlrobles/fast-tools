@@ -12,8 +12,9 @@ UPLOAD_DIRECTORY = ""
 
 if platform.system() == "Linux":
     UPLOAD_DIRECTORY = "/templates"
-else
+else:
     UPLOAD_DIRECTORY = "./templates"
+    print("windows")
 
 #sUPLOAD_DIRECTORY = "./templates"
 if not os.path.exists(UPLOAD_DIRECTORY):
