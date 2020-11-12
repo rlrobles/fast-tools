@@ -18,3 +18,7 @@ https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/26/python-virt
 pip freeze
 $ env1/bin/pip freeze > requirements.txt
 $ env2/bin/pip install -r requirements.txt
+
+https://stackoverflow.com/questions/8220108/how-do-i-check-the-operating-system-in-python/8220141
+https://stackoverflow.com/questions/1325581/how-do-i-check-if-im-running-on-windows-in-python
+https://www.w3schools.com/python/python_conditions.asp

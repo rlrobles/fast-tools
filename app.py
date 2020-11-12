@@ -94,23 +94,32 @@ def funA007():
         print(document)
     #return cursor
     #return cursor
-    return Response(cursor, mimetype='application/json')
+    return Response(jsonify(cursor), mimetype='application/json')
 
+
+#@app.route("/upload/document/<filename>", methods=['POST'])
 @app.route("/upload/document", methods=['POST'])
 #@basic_auth.required
 def funA008():
-    jsonIn = request.json
-    photos = UploadSet('photos', IMAGES)
-    if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
-        rec = Photo(filename=filename, user=g.user.id)
-        rec.store()
-        flash("Photo saved.")
+    if request.method == "POST":
+        if request.files:
+            image = request.files["image"]
+            print(image)
+            image.save(os.path.join(UPLOAD_DIRECTORY, image.filename))
+    #jsonIn = request.json
+    #photos = UploadSet('photos', IMAGES)
+    # with open(os.path.join(UPLOAD_DIRECTORY, filename), "wb") as fp:
+    #     fp.write(request.data)
+    # if request.method == 'POST' and 'photo' in request.files:
+    #     filename = photos.save(request.files['photo'])
+    #     rec = Photo(filename=filename, user=g.user.id)
+    #     rec.store()
+    #     flash("Photo saved.")
         #return redirect(url_for('show', id=rec.id))
     #return render_template('upload.html')
     #res = ren.renderTemplate(const.INIT_PATH_TEMPLATE,'generate-controller.jinja2',jsonIn)
     #return Response(res, mimetype='text/javascript')
-    return "fff"
+    return "subido"
 
 @app.route("/files", methods=['GET'])
 #@basic_auth.required
